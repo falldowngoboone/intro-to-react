@@ -30,7 +30,7 @@ This one's straightforward. Select `React`.
 
 > ℹ️ **Good to know** 
 >
-> Fun fact: Vite, French for _fast_, was originally created by Evan You specifically for another one of his projects, [Vue](), a React competitor.
+> Fun fact: Vite, French for _fast_, was originally created by Evan You specifically for another one of his projects, [Vue](https://vuejs.org/), a React competitor.
 
 Finally, one more prompt:
 
@@ -70,7 +70,7 @@ In `package.json`, several new scripts have been added to the project:
 
 The `index.html` file has also changed somewhat. There are no more scripts that reference the UMD version of React, and we now reference the newly-created `main.jsx` script. We'll talk more about that new extension in the next exercise.
 
-Vite uses all `<script type="module">` elements in `index.html` as entry points. 
+Vite uses all `<script type="module">` elements in `index.html` as entry points and will generate separate bundles for each during the `build` script. 
 
 ## Install and run
 
@@ -109,5 +109,7 @@ You can learn more about Vite configuration at https://vitejs.dev/config/.
 
 <!-- Bonus -->
 > 💰 **Bonus** 
+> 
+> Love writing configuration?
 > 
 > I mentioned earlier that some of the files we will be using are built in TypeScript. If you're feeling adventurous, try configuring TypeScript by adding a `tsconfig.json`. Check out https://www.robinwieruch.de/vite-typescript/ if you need some guidance. The next exercise will show the final configuration.
