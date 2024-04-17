@@ -1,21 +1,14 @@
-import { formatMoney } from '@/lib';
-
-function MenuItem({ image, name, price }) {
+function MenuItem() {
   return (
     <>
-      <div className="overflow-hidden rounded">
-        <img
-          className="transition-transform ease-out"
-          height="300"
-          width="300"
-          src={`/images/${image.url}`}
-          alt={image.alt}
-        />
-      </div>
-      <div>
-        <div className="text-lg font-bold">{name}</div>
-        <div>{formatMoney(price)}</div>
-      </div>
+      <img
+        height="300"
+        width="300"
+        src="/images/cheeseburger.jpeg"
+        alt="Cheeseburger" // You can do better than this...😅
+      />
+      <div className="text-lg font-bold">Cheeseburger</div>
+      <div>$6.99</div>
     </>
   );
 }
