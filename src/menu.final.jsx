@@ -1,7 +1,6 @@
 import { Title } from './title';
-import { MenuItem } from './menu-items';
-// 👇 Uncomment the next line to pull in your menu item data
-// import { items } from './menu-data';
+import { MenuItem, MenuItems } from './menu-items';
+import { items } from './menu-data';
 
 function Menu() {
   return (
@@ -20,9 +19,17 @@ function Menu() {
       <div className="container pb-16 pt-8 lg:gap-x-16 lg:gap-y-8">
         <main className="col-span-full flex flex-col gap-8">
           <Title>Menu</Title>
-          <div>
-            <MenuItem />
-          </div>
+          <MenuItems>
+            {items.map((menuItem) => (
+              <div key={menuItem.productId}>
+                <MenuItem
+                  name={menuItem.name}
+                  image={menuItem.image}
+                  price={menuItem.price}
+                />
+              </div>
+            ))}
+          </MenuItems>
         </main>
       </div>
       <footer className="bg-slate-800 text-slate-400">
