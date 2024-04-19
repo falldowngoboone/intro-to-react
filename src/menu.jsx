@@ -1,5 +1,5 @@
 import { Title } from './title';
-import { MenuItem } from './menu-items';
+import { MenuItem, MenuItems } from './menu-items';
 // 👇 Uncomment the next line to pull in your menu item data
 // import { items } from './menu-data';
 
@@ -20,9 +20,11 @@ function Menu() {
       <div className="container pb-16 pt-8 lg:gap-x-16 lg:gap-y-8">
         <main className="col-span-full flex flex-col gap-8">
           <Title>Menu</Title>
-          <div>
-            <MenuItem />
-          </div>
+          <MenuItems>
+            <div>
+              <MenuItem />
+            </div>
+          </MenuItems>
         </main>
       </div>
       <footer className="bg-slate-800 text-slate-400">
