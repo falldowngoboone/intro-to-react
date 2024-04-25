@@ -1,7 +1,7 @@
-import { Title } from './title';
+import { Menu } from './menu';
 
 function App() {
-  return <Title>Menu</Title>;
+  return <Menu />;
 }
 
 export { App };

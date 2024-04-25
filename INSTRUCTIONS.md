@@ -1,153 +1,143 @@
 # Exercise 5: Convert HTML to JSX
 
-So far, we've been using React's `createElement` to create components. While it does the trick, `createElement` quickly becomes less convenient the more your markup increases in complexity. To improve developer experience, Facebook created JSX, an XML-like syntax that looks a lot like HTML but compiles to `createElement`. Here's a sample:
+So far, we've been directly using React's `createElement` to create components. While it's technically possible to build React apps this way, using `createElement` becomes less convenient with more complex markup. JSX is meant to make creating and composing elements in React as easy as writing HTML.
 
-```jsx
-<div>
-  <p>Hi there!</p>
-  <MyComponent aProp="A value">A nested string</MyComponent>
-  <SelfClosingComponent />
+There are, however, a few differnces between HTML and JSX. Before we begin this exercise, let's discuss JSX basics.
+
+## A quick JSX primer
+
+Like HTML, JSX elements have an opening and closing tag, both beginning and ending with angle brackets (`<>`), with the closing tag including a forward slash after the beginning angle bracket (`/`):
+
+```js
+<div>Hello, world!</div>
+```
+
+The content passed in between the element tags becomes the `children` argument of `createElement`:
+
+```js
+// this is what the above JSX is converted to
+React.createElement('div', {}, 'Hello, world!');
+```
+
+Nested elements must close their tags before the closing parent tag:
+
+```js
+// ❌ this is invalid JSX nesting
+<section>
+  <div>
+  </section>
 </div>
 
-// compiled output
-React.createElement(
-  'div',
-  {},
-  React.createElement('p', {}, 'Hi there!'),
-  React.createElement(MyComponent, { aProp: 'A value' }, 'A nested string'),
-  React.createElement(SelfClosingComponent)
-);
+// ✅ this is valid JSX nesting
+<section>
+  <div></div>
+</section>
 ```
 
-This syntax makes nesting multiple levels of markup as trivial as writing HTML, but it comes with the overhead of adding a transform step before the code can be run. Vite handles the transform for us by compiling all JSX into memory for development and outputting plain JavaScript during the build phase, but we need to first make some adjustments to our code.
-
-> ℹ️ **Good to know** 
->
-> For these exercises, check your work by running `npm run dev`. You can stop the dev server by holding `CTL + c` on Windows or `CMD + c` on Mac.
-
-## Update file extensions
-
-Vite, like many other frameworks, has adopted the covention of naming any file that contains JSX with the `.jsx` extension. There is no special significance to this extension other than it tells Vite to automatically transform any JSX in the file.
-
-Go ahead and update the following files to use the `.jsx` extension:
-
-- `src/app.js` → `src/app.jsx`
-- `src/main.js` → `src/main.jsx`
-- `src/title.js` → `src/title.jsx`
-
-## Update file references
-
-Make sure to update the extension of all references to the files you just updated. Check the following files:
-
-- `index.html`
-- `src/main.jsx`
-- `src/app.jsx`
-
-## Convert `main.jsx`
-
-In `main.jsx`, change the React and ReactDOM imports at the top of the file to the following:
+If the element is empty (no `children`), you can close it immediately with a forward slash and greater than sign (`/>`):
 
 ```js
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+<img />
 ```
 
-`StrictMode` is a special component that checks for some common bugs during development. It's recommended to wrap your top-level `App` component with `StrictMode`. Go ahead and convert the `React.createElement` with `App` to a JSX element and wrap it with `StrictMode`:
-
-```jsx
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
-```
-
-Check your work with `npm run dev`.
-
-> ℹ️ **Good to know** 
-> 
-> What exactly does `StrictMode` do? Among other things, it renders your components twice. Why? There is a class of bugs related to side effects in a component's render function.
-> 
-> Strictly speaking (see what I did there?), you should avoid interacting directly with anything outside of your component function. We will talk later about how to run side effects in a safe manner.
->
-> Learn more about strict mode at https://react.dev/reference/react/StrictMode.
-
-## Convert `app.jsx`
-
-Go ahead and convert the `createElement` in `app.jsx`. Use the previous examples if you get stuck.
-
-Run `dev` if you have stopped your dev server.
-
-## Convert `title.jsx`
-
-Before converting `title.jsx`, there are a couple things to note.
-
-First of all, you can pass JavaScript values to JSX elements, but you need to wrap those values in `{}`:
-
-```jsx
-// props can be any valid JavaScript value (e.g. strings, numbers, objects, functions, etc.) 
-const myProp = 'My value';
-// children must be valid React node (a React element, an array of React elements, or a string, number, or boolean)
-const myChild = 'My child';
-
-<MyComponent myProp={myProp}>{myValue}</MyComponent>
-```
-
-This tells the JSX compiler to stop parsing JSX and evaluate everything inside of the `{}` as JavaScript.
-
-Second, sometimes you may not know the props you might be passed. There's a special way to handle those situations:
-
-```jsx
-function MyComponent(props) {
-  return <div {...props} />;
-}
-```
-
-This is a special version of the native [JavaScript spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax). 
-
-You can use the spread syntax to gather props as well:
-
-```jsx
-function MyComponent({children, ...props}) {
-  return <div {...props}>{children}</div>
-}
-```
-
-Now, using these examples, convert `title.jsx` to JSX. Be sure to `npm run dev` if you haven't already.
-
-## Add base styles
-
-Let's add some styles. For this project, we're using [Tailwind CSS](https://tailwindcss.com). Tailwind uses a collection of utility CSS classes to allow styles to be quickly built up.
-
-Before we can use Tailwind, we need to add the base `index.css`. Vite allows you to import CSS files as if you were import a JavaScript module:
+Unlike HTML, any JSX element can be self-closing:
 
 ```js
-import 'my-styles.css';
+// valid JSX but not valid HTML
+<div />
 ```
 
-In `main.jsx`, import `index.css` underneath the `App` import.
+Previously we learned that data is passed into React elements as props, the second argument of `createElement`.
 
-Check your work (you should know how by now). You should see all the default browser styles removed from the "Menu" title.
+Props are passed to JSX elements like HTML attributes. Like HTML attributes, prop values can be string literals. These prop types are defined with double quotes (`""`):
 
-## Style the `Title` component
+```js
+<img src="some-image.jpg" height="300" width="300" />
+```
 
-Finally, we'll style `Title` to make it look more like a title.
+The above element's props are passed as the second argument of `createElement`:
 
-As previously stated, Tailwind uses classes to apply styles to your components. With HTML, you apply CSS styles with the `class` attribute:
+```js
+createElement('img', {src: 'some-image.jpg', height: '300', width: '200'});
+```
+
+You can also pass JavaScript [expression statements](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/Expression_statement) as prop values. You **must** pass these prop types with curly braces (`{}`):
+
+```js
+<img src={`images/${imageName}.jpg`} height={300} width={300}>
+```
+
+As mentioned previously, custom React components need to be capitalized. This tells React you're passing a custom component instead of an HTML element:
+
+```js
+<Title>My title</Title>
+<title>My title</title>
+```
+
+These JSX elements are interpreted as follows:
+
+```js
+createElement(Title, {}, 'My title'); // no quotes around Title, expects a function called Title
+createElement('title', {}, 'My title'); // quotes around title, no function needed since it's built in
+```
+
+There are a few other important things to know about JSX, but we will explore those as needed.
+
+## Create a title with JSX
+
+- `src/title.jsx`
+
+Open `title.jsx`. We are currently returning `null`. Replace `null` with an `h1` element and make sure it handles `children` properly.
+
+```js
+<Title>Menu</Title>
+```
+
+should render:
 
 ```html
-<!-- this is HTML, not JSX -->
-<div class="font-bold">I'm HTML</div>
+<h1>Menu</h1>
 ```
 
-But JSX uses JavaScript properties, not attributes. The property equivalent of `class` is [`className`](https://developer.mozilla.org/en-US/docs/Web/API/Element/className). There are other properties that are different from their HTML equivalent as well, but `className` will probably be the one you use the most:
+## Styling in JSX
 
-```jsx
-// JSX
-<div className="font-bold">I'm JSX</div>
+There are several approaches to styling JSX elements. The most direct way is to add an inline `style` object prop to any HTML element:
+
+```js
+<p style={{color: 'red'}}>I am red text.</p>
 ```
 
-Add the following styles to the `h1` in `Title`:
+Inline styles can be difficult to work with, especially when styling an entire application. The only real reason to use inline styling is if you need to pass create a dynamic style for an element (e.g. creating user resizable elements). In general, this appraoch is not recommended.
+
+A more common approach is using CSS classes:
+
+```css
+.red {
+  color: red;
+}
+```
+
+In HTML, you would reference this CSS class with the `class` attribute:
+
+```html
+<p class="red">I am red text.</p>
+```
+
+However, `class` is a reserved keyword in JavaScript. The JSX equivalent of `class` is `className`:
+
+```js
+<p className="red">I am still red text.</p>
+```
+
+There are a couple of other ways to approach styling in React, but we will stick to CSS classes for this course.
+
+For our restaurant website, we've added [Tailwind CSS](https://tailwindcss.com), a CSS framework that uses predefined CSS classes to build up styles quickly and effeciently.
+
+## Style the page title
+
+Our `Title` looks very plain right now. Let's style it to look more like a page title.
+
+Add the following CSS classes to the `h1` in `Title`:
 
 ```
 "text-4xl font-black uppercase tracking-wider"
@@ -156,3 +146,36 @@ Add the following styles to the `h1` in `Title`:
 > 💰 **Bonus** 
 > 
 > Add your own styles. Refer to [Tailwind's docs](https://tailwindcss.com/docs/installation) for all the available classes.
+
+## Convert an HTML page to JSX
+
+- `src/menu.html`
+- `src/menu.jsx`
+- `src/app.jsx`
+
+Now that you know a little bit about the differences between HTML and JSX, let's apply that information to a larger task.
+
+Open `src/menu.html`. This is the initial markup for what will become our website's Menu page, but we need to move it into our React app.
+
+Open `src/menu.jsx`. This file contains the Menu page component where we will use the markup from `src/menu.html`.
+
+Copy all of the markup from `src/menu.html` and paste it into the `Menu` component of `src/menu.jsx`, replacing the `null` placeholder.
+
+Update the pasted markup to be valid JSX. Hint: refer to how to style JSX elements with CSS classes.
+
+## Render the menu page
+
+- `src/menu.jsx`
+- `src/app.jsx`
+
+Refer to `src/menu.jsx`. Notice the menu page markup includes an `h1` with a very familiar list of classes. It is, in fact, a complete copy of the `Title` component. 
+
+Reduce code duplication by replacing the `h1` in `src/menu.jsx` with our `Title` component.
+
+If you get stuck, refer to `src/menu.final.jsx`.
+
+Finally, open `src/app.jsx`. We are currently rendering a single page title.
+
+Replace the returned `Title` component with our new `Menu` page component. Since we don't need to pass any `children` to `Menu`, you can render it as a self-closing tag (e.g. `<SelfClosing />`).
+
+We now have an initial Menu page. We'll now work on building up the functionality of this page. The next thing we'll do is optimize how we render menu items.
