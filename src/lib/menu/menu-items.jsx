@@ -15,7 +15,7 @@ function MenuItemSkeleton() {
   );
 }
 
-function MenuItems({ children, isPending }) {
+function MenuItems({ isPending, children }) {
   if (isPending) {
     return (
       <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-4">
@@ -41,7 +41,15 @@ function MenuItemsNoResults() {
   );
 }
 
-function MenuItem({ productId, image, name, price }) {
+function MenuError() {
+  return (
+    <div className="container py-8 text-center">
+      <p className="text-red-600">An error occurred. Please try again later.</p>
+    </div>
+  );
+}
+
+function MenuItem({ productId, name, price, image }) {
   return (
     <Link
       className="flex flex-col gap-2 [&:hover_img]:scale-110"
@@ -64,4 +72,4 @@ function MenuItem({ productId, image, name, price }) {
   );
 }
 
-export { MenuItem, MenuItems, MenuItemsNoResults };
+export { MenuItem, MenuItems, MenuItemsNoResults, MenuError };

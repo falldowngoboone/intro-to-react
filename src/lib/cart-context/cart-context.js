@@ -1,5 +1,2 @@
-import { createContext } from 'react';
-
-const CartContext = createContext();
-
-export { CartContext };
+export * from './cart-context.final';
+// export * from './cart-context.exercise';

@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 
 import { Grid, GridAside, GridMain } from '@/lib/shared-components/grid';
@@ -7,51 +6,39 @@ import {
   MenuItems,
   MenuItem,
   MenuItemsNoResults,
+  MenuError,
   CategoryFilters,
   CategoryFilter,
-  getCategoryListQuery,
-  getMenuItemListQuery,
   SearchForm,
   StickySidebar,
 } from '@/lib/menu';
-
-function loader(queryClient) {
-  return async ({ request }) => {
-    const url = new URL(request.url);
-    const categoryListQuery = getCategoryListQuery();
-    const menuItemListQuery = getMenuItemListQuery(url.searchParams);
-
-    const categoriesPromise = queryClient.ensureQueryData(categoryListQuery);
-    const itemsPromise = queryClient.ensureQueryData(menuItemListQuery);
-
-    try {
-      const [categories, items] = await Promise.all([
-        categoriesPromise,
-        itemsPromise,
-      ]);
-
-      return { categories, items };
-    } catch (error) {
-      throw new Response(error.message, { status: 500 });
-    }
-  };
-}
+import { useFetch, Status } from '@/lib/use-fetch';
 
 function Menu() {
   const [searchParams] = useSearchParams();
-  const { data: categories } = useQuery(getCategoryListQuery());
-  const { data: items } = useQuery(getMenuItemListQuery(searchParams));
+
+  const { data: items = [], status: itemsStatus } = useFetch(
+    `/api/menu?${searchParams.toString()}`,
+  );
+  const { data: categories = [], status: categoriesStatus } =
+    useFetch(`/api/menu/categories`);
+  const hasErrors =
+    itemsStatus === Status.REJECTED || categoriesStatus === Status.REJECTED;
+
+  if (hasErrors) {
+    return <MenuError />;
+  }
 
   return (
     <Grid>
       <GridAside>
         <StickySidebar>
           <SearchForm />
-          <CategoryFilters isPending={!categories}>
+          <CategoryFilters isPending={categoriesStatus === Status.PENDING}>
             <CategoryFilter key="all" href=".">
               All
             </CategoryFilter>
-            {categories?.map((category) => (
+            {categories.map((category) => (
               <CategoryFilter
                 key={category.categoryId}
                 href={`?category=${category.categoryId}`}
@@ -64,17 +51,24 @@ function Menu() {
       </GridAside>
       <GridMain>
         <Title>Menu</Title>
-        <MenuItems>
+        <MenuItems isPending={itemsStatus === Status.PENDING}>
           {items.length === 0 ? (
             <MenuItemsNoResults />
           ) : (
-            items.map((item) => <MenuItem key={item.productId} {...item} />)
+            items.map((menuItem) => (
+              <MenuItem
+                key={menuItem.productId}
+                productId={menuItem.productId}
+                name={menuItem.name}
+                image={menuItem.image}
+                price={menuItem.price}
+              />
+            ))
           )}
         </MenuItems>
       </GridMain>
     </Grid>
   );
 }
-Menu.loader = loader;
 
 export { Menu };

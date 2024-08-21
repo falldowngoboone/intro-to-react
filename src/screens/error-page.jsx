@@ -1,14 +1,8 @@
-import { useRouteError } from 'react-router-dom';
-
 import { Title } from '@/lib/shared-components/title';
-import { Grid } from '@/lib/shared-components/grid';
 
 export default function ErrorPage({ message }) {
-  const error = useRouteError();
-  console.error(error);
-
   return (
-    <Grid>
+    <div className="container grid auto-rows-min grid-cols-12 gap-x-8 gap-y-4 pb-16 pt-8 lg:gap-x-16 lg:gap-y-8">
       <div className="relative col-span-full">
         <img
           className="w-1/2 max-w-[950px] md:translate-x-[10%]"
@@ -24,17 +18,12 @@ export default function ErrorPage({ message }) {
               of a cute puppy created by AI.
             </p>
             <p>
-              <i>
-                {message ||
-                  error?.statusText ||
-                  error?.message ||
-                  'Unknown error!'}
-              </i>
+              <i>{message || 'Unknown error!'}</i>
             </p>
           </div>
         </div>
       </div>
-    </Grid>
+    </div>
   );
 }
 
