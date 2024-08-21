@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 
 import { EmptyCart, CartItems, CartItem } from '@/lib/cart';
-import { useCart } from '@/lib/cart-context';
 import { formatMoney } from '@/lib/format-money';
 import { pluralize } from '@/lib/pluralize';
 import { SummaryItem, Summary } from '@/lib/shared-components/summary';
@@ -15,12 +14,13 @@ import {
 import { Button } from '@/lib/ui/button';
 import { Title } from '@/lib/shared-components/title';
 import { Grid, GridColLeft, GridColRight } from '@/lib/shared-components/grid';
+import { useCart } from '@/lib/cart-context';
 
 function Cart() {
   const {
     items,
-    removeFromCart,
     setCartQuantity,
+    removeFromCart,
     subtotal,
     tax,
     total,
