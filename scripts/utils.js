@@ -48,6 +48,8 @@ function getVariants() {
   const filesByMaster = {};
   for (const file of files) {
     const { dir, name, base, ext } = path.parse(file);
+    // if extension ends in x, remove x (e.g. jsx -> js)
+    const normalizedExt = ext.replace(/x$/, '');
     const contents = fs.readFileSync(file).toString();
     const hasDefaultExport = /^export default /m.test(contents);
     const hasCJSExport = /^module.exports /m.test(contents);
@@ -59,7 +61,7 @@ function getVariants() {
       exportLines = [`module.exports = require('./${name}')`];
     }
     const number = getExtraCreditNumberFromFilename(base);
-    const main = path.join(dir, name.replace(/\..*$/, ext));
+    const main = path.join(dir, name.replace(/\..*$/, normalizedExt));
 
     filesByMaster[main] = filesByMaster[main] || { extras: [] };
 
