@@ -1,41 +1,13 @@
 #!/usr/bin/env node
 
-import fs from 'node:fs';
-import {
-  spawnSync,
-  getExerciseBranches,
-  getVariants,
-  getExtraCreditTitles,
-} from './scripts/utils.js';
-
-const actions = {
-  changeExercise,
-  startExtraCredit,
-};
+import { spawnSync, getExerciseBranches } from './scripts/utils.js';
 
 const currentBranch = spawnSync('git rev-parse --abbrev-ref HEAD');
 
 async function go() {
-  if (currentBranch === 'main') {
-    // if we're on main then you can't do anything else
-    await changeExercise();
-    return;
-  }
-
-  const { action } = await (
-    await import('inquirer')
-  ).default.prompt([
-    {
-      name: 'action',
-      message: `What do you want to do?`,
-      type: 'list',
-      choices: [
-        { name: 'Change Exercise', value: 'changeExercise' },
-        { name: 'Start Extra Credit', value: 'startExtraCredit' },
-      ],
-    },
-  ]);
-  await actions[action]();
+  // if we're on main then you can't do anything else
+  await changeExercise();
+  return;
 }
 
 function getDisplayName(exerciseBranch) {
@@ -73,58 +45,6 @@ async function changeExercise() {
     spawnSync('node ./scripts/swap exercise');
   }
   console.log(`✅  Ready to start work in ${branch}`);
-}
-
-async function startExtraCredit() {
-  const variants = getVariants();
-  const maxExtra = Math.max(
-    ...Object.values(variants)
-      .reduce((acc, v) => [...acc, ...v.extras], [])
-      .map((e) => e.number),
-  );
-
-  const extraCreditTitles = getExtraCreditTitles();
-
-  function getVariantDisplayName(variant) {
-    if (variant === 'final') return 'Final';
-    return `Extra Credit ${variant}: ${extraCreditTitles[variant - 1]}`;
-  }
-
-  const { variant } = await (
-    await import('inquirer')
-  ).default.prompt([
-    {
-      name: 'variant',
-      message: `Which part do you want to work on?`,
-      type: 'list',
-      choices: [
-        { name: 'Final', value: 'final' },
-        ...Array.from({ length: maxExtra }, (v, i) => ({
-          name: getVariantDisplayName(i + 1),
-          value: i + 1,
-        })),
-      ],
-    },
-  ]);
-
-  for (const { extras, exercise, final } of Object.values(variants)) {
-    const availableECs = extras.map((e) => e.number).filter((n) => n < variant);
-    const maxEC = Math.max(...availableECs);
-    const maxExtra = extras.find((e) => e.number === maxEC);
-
-    if (variant === 'final' || (!maxExtra && !final)) {
-      // reset the exercise to the original state
-      spawnSync(`git checkout -- ${exercise.file}`);
-    } else {
-      const newExerciseContents = fs.readFileSync((maxExtra || final).file, {
-        encoding: 'utf-8',
-      });
-      fs.writeFileSync(exercise.file, newExerciseContents);
-    }
-  }
-  console.log(
-    `✅  Ready to start working on ${getVariantDisplayName(variant)}`,
-  );
 }
 
 go();
