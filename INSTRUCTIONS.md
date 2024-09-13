@@ -14,7 +14,7 @@ npm run start:final
 
 You should see a log that the application is served at http://localhost:3000. Open that link in your browser of choice to see what you will be building.
 
-Press `CMD` + `C` (`CTRL` + `C` on Windows) to stop the server.
+Press `CTRL` + `C` to stop the server.
 
 ## Create the initial component
 
@@ -24,7 +24,7 @@ Start the exercise server:
 npm run start 
 ```
 
-Navigate to http://localhost:3000. You will need to refresh the page to see any changes you make. If you need to stop the server, press `CMD` + `C` (`CTRL` + `C` on Windows).
+Navigate to http://localhost:3000. You will need to refresh the page to see any changes you make.
 
 In [`index.html`](./index.html), create a function inside the `script` tags at the bottom of the page called `Title`, _above_ the `root.render`:
 
@@ -50,7 +50,15 @@ If you are viewing your app in a browser, refresh the page. Do you see anything?
 
 ## Forward props
 
-One of the ways React components receive data is through `props`, an object that can contain any type of JavaScript value, including other objects and even functions. Props are passed to the rendered component as the second argument of `React.createElement`. This is what the `null` represents in the current rendered `h1`.
+One of the ways React components receive data is through `props`, an object that can contain any type of JavaScript value, including other objects and even functions. Props are passed to the rendered component as the second argument of `React.createElement`:
+
+```js
+function MyComponent() {
+    return React.creactElement('h1', {className: 'greeting'}, 'Hello, world!');
+}
+```
+
+In the example above, the object `{className: 'greeting'}` serves as the `h1`'s props. The `props` argument may also be `null`, which means there are no props to pass.
 
 The last argument of `React.createElement` is a special prop called `children`. React `children` are zero or more React elements that are rendered as nested elements of the rendered component. You can pass an array of React elements, a single React element, or several React elements as `children`.
 
