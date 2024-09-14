@@ -8,13 +8,30 @@ The first thing we need to do is set up our project. We will use Vite, along wit
 
 1. In your terminal, use the following command to generate the project:
    ```bash
-   npm create vite@latest .
+   npm create vite@latest
    ```
 2. If prompted to install `create-vite`, agree.
-3. Since we're inside an existing project, you'll likely see the following prompt: `Current directory is not empty. Please choose how to proceed:`
-4. Select `Ignore files and continue`.
-5. Choose `React` for your framework and `JavaScript` for your variant.
-6. Select `React`.
+3. For project name, you can use whatever name you would like. The default's fine as well (`vite-project`).
+4. Choose `React` for your framework
+5. Choose `JavaScript` for your variant.
+
+Hopefully you now see a success message, along with some instructions:
+
+```
+cd <your-project-name>
+npm install
+npm run dev
+```
+
+Run the first command to change your directory (`cd`) to the project's directory. We will run the other two commands later.
+
+**Note: You will need to return to the exercise's root directory in order to change exercises with `node go`.** The script will only work in this directory. To move back to the parent directory, run:
+
+```bash
+cd ..
+```
+
+The `..` is a special symbol that represents the current directory's parent directory.
 
 ## Explore the new and modified files
 
@@ -75,6 +92,6 @@ In your browser, visit http://localhost:3000. Alternatively, if you are using th
 
 You should now see a simple React app running in your browser titled "Vite + React".
 
-To stop the app, type `CMD` + `C` (Mac)/`CTRL` + `C` (Windows).
+To stop the app, type `CTRL` + `C`.
 
 Now that we've set up our project, let's start building it!
