@@ -12,7 +12,7 @@ npm run start:final
 
 You should see a log that the application is served at http://localhost:3000. Open that link in your browser of choice to see what you will be building.
 
-Press `CMD` + `C` (`CTRL` + `C` on Windows) to stop the server.
+Press `CTRL` + `C` to stop the server.
 
 ## Create a `Title` module
 
@@ -52,7 +52,7 @@ function App() {
 }
 ```
 
-Copy the element rendered in [`index.html`](./index.html) (line 19) and paste inside the body of the `App` function, making sure to return it:
+Copy the element rendered in [`index.html`](./index.html) and paste inside the body of the `App` function, making sure to return it:
 
 ```js
 function App() {
