@@ -1,4 +1,4 @@
-# Exercise 19: Fetch Product with Route Params
+# Exercise 20: Fetch Product with Route Params
 
 Our menu page is pretty much complete, but we still need detail pages for each menu item so users can learn a bit more about our food before ordering. We could hard-code a page for every item, but that's a maintenance nightmare. Instead, our team has gratefully built a product detail page template for us.
 
