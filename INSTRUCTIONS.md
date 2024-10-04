@@ -12,7 +12,7 @@ We'll address this problem by first moving all of the cart logic and state somew
 ## Add cart route
 
 1. First, open [`src/app.exercise.jsx`](./src/app.exercise.jsx).
-2. Import `Cart` from `./screens/Cart`.
+2. Import `Cart` from `./screens/cart`.
 3. Add a route for `Cart` with a path of `/cart`. Make sure the route uses the `GlobalLayout`.
 
 ## Move cart state
