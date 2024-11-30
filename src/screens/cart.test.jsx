@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { Cart } from './cart';
 import { useCart } from '@/lib/cart-context';
 import { formatMoney } from '@/lib/format-money';
@@ -12,12 +12,6 @@ vi.mock('@/lib/format-money');
 vi.mock('@/lib/pluralize');
 
 describe('Cart', () => {
-  beforeEach(() => {
-    useCart.mockClear();
-    formatMoney.mockClear();
-    pluralize.mockClear();
-  });
-
   it('renders empty cart message when there are no items', () => {
     useCart.mockReturnValue({
       items: [],
