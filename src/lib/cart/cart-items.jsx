@@ -33,6 +33,7 @@ function CartItem({
           <h2 className="text-lg font-bold">{name}</h2>
           <div className="flex items-center gap-2">
             <Input
+              aria-label={`Quantity of ${name}`}
               className="w-20"
               value={quantity}
               onChange={onQuantityChange}
